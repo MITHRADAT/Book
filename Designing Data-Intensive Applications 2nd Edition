@@ -1,0 +1,20 @@
+chapter1:
+types of using databases
+1. OLTP => OnLine Transaction Processing
+2. OLAP => OnLine Analytical Processing
+3. HTAP => Hybrid Transactional Analytical Processing
+
+ETL (Extract Transform Load) is a process to extract data from a source, transform it to the frames we like and then load them into desired database destination.
+
+considering flow of data we have two types of database:
+1. systems of record => source of truth
+2. derived data systems => classic example is cache; these are redundant and can be created from "system of recoed"
+
+some object storage services:
+1. Amazon S3
+2. Azure BLOB Storage
+3. Cloudflare R2
+
+To tolerate the failure of an individual hard disk, RAID (redundant array of independent disks) is often used to maintain copies
+of the data on several disks attached to the same machine. RAID can be implemented either in hardware or in software by the operating system,
+and it is transparent to the applications accessing the filesystem.
