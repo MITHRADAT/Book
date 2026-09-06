@@ -30,3 +30,7 @@ Serverless, or Function as a Service (FaaS):
 
 +++++++++++++++++++++++++++++++++
 chapter2:
+
+performance metrics:
+1. Response time => the elapsed time from the moment when a user makes a request until they receive the request answer
+2. Throughput => the number of requests or the data volumne per second that the system is processing
