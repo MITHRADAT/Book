@@ -57,3 +57,19 @@ complexity:
 
 ==================================================
 chapter3: data models and query languages
+
+declarative query languages:
+1. specifies what results and pettern is required
+2. dosnt specify how to get desired results, like which indexes must be invoked; instead optimizer handles such things
+3. on the other hands, explicit programming languages require to be told which algorithms in which order must be executed
+
+data warehoues structures:
+1. One Big Table
+    -. everything is merged into one big table and is highly denormalized
+2. star schema
+    1. a fact table which is a big table
+    2. attributes which are other columns in fact table storing values
+    3. foreign keys in fact table referencing to dimension tables
+    4. dimenstion tables to have normalize data
+3. snowflake schema
+    -. its like star schema but its more normalized; dimension tables have foreign key to other tables
