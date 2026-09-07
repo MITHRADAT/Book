@@ -1,5 +1,5 @@
-+++++++++++++++++++++++++++++++++
-chapter1:
+==================================================
+chapter1: trade-offs in data systems architecture 
 
 types of using databases
 1. OLTP => OnLine Transaction Processing
@@ -28,8 +28,8 @@ Serverless, or Function as a Service (FaaS):
 4. serverless approach is bringing metered billing to code execution
 5. each serverless function execution still runs on a server but subsequent executions might run on a different one
 
-+++++++++++++++++++++++++++++++++
-chapter2:
+==================================================
+chapter2: defining non functional requirements
 
 performance metrics:
 1. response time => 
@@ -49,3 +49,11 @@ scaling types:
 2. shared memory architecture => getting parallelism on a machine by sharing multiple processes or threads
 3. shared disk architecture => several machines but stores data on an array of disks that is shared
 4. shared nothing architecture or horizontal scaling or scaling out => distributed systems with multiple nodes
+
+complexity:
+1. accidental => arises only because of limitation of tooling
+2. essential => inherent in the problem domain
+-. this distinction is flawed, because boundaries between the essential and the accidental shift as tooling evolves
+
+==================================================
+chapter3: data models and query languages
