@@ -32,5 +32,20 @@ Serverless, or Function as a Service (FaaS):
 chapter2:
 
 performance metrics:
-1. Response time => the elapsed time from the moment when a user makes a request until they receive the request answer
-2. Throughput => the number of requests or the data volumne per second that the system is processing
+1. response time => 
+    the elapsed time from the moment when a user makes a request until they receive the request answer
+    in terms of performance metrics, user cares about the most
+2. throughtput => 
+    the number of requests or the data volumne per second that the system is processing
+    determines the required computing resources (e.g. how many servers you need)
+    a system is scalable if its max throughtput can be significantly increased by adding compuring resources
+
+linear scalability:
+1. if doubling the resources will enable you to handle twice the load while keeping performance the same
+2. this is considered a good thing
+
+scaling types:
+1. vertical scaling or scaling up => move to a more powerful machine
+2. shared memory architecture => getting parallelism on a machine by sharing multiple processes or threads
+3. shared disk architecture => several machines but stores data on an array of disks that is shared
+4. shared nothing architecture or horizontal scaling or scaling out => distributed systems with multiple nodes
