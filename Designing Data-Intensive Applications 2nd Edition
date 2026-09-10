@@ -73,3 +73,33 @@ data warehoues structures:
     4. dimenstion tables to have normalize data
 3. snowflake schema
     -. its like star schema but its more normalized; dimension tables have foreign key to other tables
+
+==================================================
+chapter3: Storage and Retreival
+
+SSTable:
+1. Sorted String Table => the idea is to have a hash table sorted by keys
+
+LSM storage engines (Log Structured Merge tree):
+1. write keys and their values in memory in a sorted way in a log file named memtable using ordered map data structures like red black tree and read them back in a sorted order
+2. when memtable gets bigger than a threshold like 5 MB, write it to disk as SSTable file (the most recent segment of database). while writing onto disk, memtables memory is claimed and can be written again.
+3. to read the value of a key, first try to find it on memtbale and if not, last recent segment file of database, if not found, keep looking in the next older segment until finding or the end of database
+4. from time to time, run a merging and compacting process in background to combine segment files and to discard overwritten or deleted values (pretty like merge sort algorithm)
+5. to ensure that memtable is not lost when database crashes, the storage engine keeps a separate log on disk to which every write is immediately appended. this log is not sorted and doesnt matter becauuse its for restoring memtbale after database crash; after writing memtable to a segment, corresponding log can be discarded.
+6. for deleting a key, set "tombstone" to the key and discard all the values for that key in merging process
+7. in order to enhance the speed of finding a key (those are in old segments specially are slow), by using keys and a few bits, "Bloom filter" works accordingly. bloom filter is probabalistic and if its false, so it is, but it can be false positive
+-. examples like RockDB, Cassandra, ScyllaDB, HBase, all inspired by Google's Bigtable paper
+
+B-Tree storage engines:
+1. B-Tree database with n records, always has depth of O(log n)
+2. the number of references to child pages in one page of the B-tree is called the branching factor. the branching factor depends on the amount of space required to store the page references and the range boundaries, but typically it is several hundred.
+3. to update a value for a key, find the key and overwrite the value
+4. to insert a new key-value, find the appropriate range and insert; if not enough space, split the page into two half-full pages and update the parent page including these two subdivisions; if parent page has no space for new reference, so it gets splitted into two and this process goes until the root of the tree
+5. for example a four level tree of 4KB pages with branching factor of 500, can store up to 250TB
+6. to make database resilient to crashes, WAL (Write Ahead Log) data structure is used; it is an append-only file to which every B-tree modification must be written before it can be applied to the pages of the tree itself (in filesystems the equivalent mechanism is "journaling")
+7. to have better performance, first use an in-memory buffer, then WAL and then flush to disk using fsync system call; now data is durable
+
+differences between Log-Structured and B-Tree databases:
+1. usually LSM is good for write heavy and B-Tree is good for read heavy applications; specillay range queries are slow in LSM and bloom filter cant help either; however, high throughtput writes in LSM can cause latency spikes (maybe because compaction process can not keep up with incoming writes), so backpressure gets applied by some databases like RockDB (suspend all reads and writes untill memtable has been written out to disk)
+2. the log-structured indexes break the database into variable-size segments, typically several megabytes or more in size, that are written once and are then immutable.
+   by contrast, B-trees break the database into fixed-size blocks or pages and may overwrite a page in place. for example PostgreSQL and SQL Server use 8 KB and MySQL uses 16 KB.
