@@ -103,3 +103,8 @@ differences between Log-Structured and B-Tree databases:
 1. usually LSM is good for write heavy and B-Tree is good for read heavy applications; specillay range queries are slow in LSM and bloom filter cant help either; however, high throughtput writes in LSM can cause latency spikes (maybe because compaction process can not keep up with incoming writes), so backpressure gets applied by some databases like RockDB (suspend all reads and writes untill memtable has been written out to disk)
 2. the log-structured indexes break the database into variable-size segments, typically several megabytes or more in size, that are written once and are then immutable.
    by contrast, B-trees break the database into fixed-size blocks or pages and may overwrite a page in place. for example PostgreSQL and SQL Server use 8 KB and MySQL uses 16 KB.
+
+column storage:
+1. in OLAP dat awarehoueses, the fact table contains billions of records (or even trillions), but dimension tables contain millions of records; so bottle neck is the fact table
+2. often, only a few number of columns are required for a specific query in OLAP databases; so it would be great to store columns data together and fetch only required columns instead of fetching all matching rows and filter desired columns
+3. usually column values are duplicated a lot, so in column oriented storage, compression using bitmaps is effective; sorted columns specially are good but consider by sorting a column, entire row gets sorted
