@@ -108,3 +108,44 @@ column storage:
 1. in OLAP dat awarehoueses, the fact table contains billions of records (or even trillions), but dimension tables contain millions of records; so bottle neck is the fact table
 2. often, only a few number of columns are required for a specific query in OLAP databases; so it would be great to store columns data together and fetch only required columns instead of fetching all matching rows and filter desired columns
 3. usually column values are duplicated a lot, so in column oriented storage, compression using bitmaps is effective; sorted columns specially are good but consider by sorting a column, entire row gets sorted
+
+
+==================================================
+chapter4: Encoding and Evolution
+
+compatibility:
+1. backward compatibility => ensures that newer code can read data written by older code
+2. forward compatibility => ensures that older code can read data written by newer code; achieving forward compatibility is trickier
+-. in the terms of API:
+    older client wants to call a newer service  => backward compatibility on request and forward  compatibility on response
+    newer client wants to call an older service => forward  compatibility on request and backward compatibility on response
+
+translations:
+1. encoding or serialization or marshaling => from in memory to a byte sequence
+2. decoding or parsing or demarshaling => from byte to in memory
+
+data formats and encodings:
+1. json/xml => can have rules, conditions, and validations
+    the issue is we dont save a lot by encoding instead of saving plain text, so whats the point of missing human readable documents
+2. protocol buffer => use field tags before any field to specify the schema
+    more compressed than ordinary encoding; backward and forward compatibilty is available but must be careful to assigning and deleting tags
+3. avro => save schema once somewhere and encode the data
+    most compressed encoding technique; requires versioning of writer schema and reader schema for compatibility and avro can itself resolve the mismatch and conflicts between these two schemas; better than protocol buffer for dynamic schemas because of saving writer and reader schema separately; it has some challenges in backward and forward compatibilities
+
+data flows between two processes:
+1. database
+2. service call (REST and RPC)
+3. workflow engine
+4. asynchronous messages
+
+IDL (Interface Definition Languages):
+1. formal description of what a service exposes (nothing about detail of implementation, even its implementing stack and tech is unknonwn)
+2. just a contract between server and client(s)
+3. two common service interface-description technologies:
+   1. OpenAPI (formerly Swagger)
+      → commonly used to describe HTTP/REST APIs
+      → can describe JSON, XML, form data, binary data, etc
+      → not limited to JSON
+   2. gRPC
+      → uses Protocol Buffers (protobuf) to define services and messages
+      → protobuf serves as the IDL
